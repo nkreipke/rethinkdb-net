@@ -28,9 +28,7 @@ namespace RethinkDb
             QueryConverter = new QueryConverter(
                 new AggregateDatumConverterFactory(
                     PrimitiveDatumConverterFactory.Instance,
-#if !NETSTANDARD
                     DataContractDatumConverterFactory.Instance,
-#endif
                     DateTimeDatumConverterFactory.Instance,
                     DateTimeOffsetDatumConverterFactory.Instance,
                     GuidDatumConverterFactory.Instance,

@@ -9,7 +9,6 @@ namespace RethinkDb.DatumConverters
     {
         public static readonly DataContractDatumConverterFactory Instance = new DataContractDatumConverterFactory();
         private static readonly object dynamicModuleLock = new object();
-        private static AssemblyBuilder assemblyBuilder = null;
         private static ModuleBuilder dynamicModule = null;
 
         private DataContractDatumConverterFactory()
@@ -23,11 +22,11 @@ namespace RethinkDb.DatumConverters
 
             datumConverter = null;
 
-            var dataContractAttribute = typeof(T).GetCustomAttribute<DataContractAttribute>();
+            var dataContractAttribute = typeof(T).GetTypeInfo().GetCustomAttribute<DataContractAttribute>();
             if (dataContractAttribute == null)
                 return false;
 
-            if (typeof(T).IsEnum)
+            if (typeof(T).GetTypeInfo().IsEnum)
                 // [DataContract] on an enum type isn't supported by this datum converter.  It possibly should be,
                 // as using the [EnumValue] attribute allows users to assign arbitrary text values to enums. (#146)
                 return false;
@@ -48,24 +47,20 @@ namespace RethinkDb.DatumConverters
             {
                 if (dynamicModule == null)
                 {
-                    var myDomain = AppDomain.CurrentDomain;
                     var name = new AssemblyName("DataContractDynamicAssembly");
 
-                    assemblyBuilder = myDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
-                    dynamicModule = assemblyBuilder.DefineDynamicModule("DataContractDynamicAssembly");
-
-                    //assemblyBuilder = myDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.RunAndSave);
-                    //dynamicModule = assemblyBuilder.DefineDynamicModule("DataContractDynamicAssembly", "DataContractDynamicAssembly.dll");
+                    var builder = AssemblyBuilder.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
+                    dynamicModule = builder.DefineDynamicModule("DataContractDynamicAssembly");
                 }
 
                 Type baseClass;
-                if (typeof(T).IsValueType)
+                if (typeof(T).GetTypeInfo().IsValueType)
                     baseClass = typeof(AbstractValueTypeDatumConverter<T>);
                 else
                     baseClass = typeof(AbstractReferenceTypeDatumConverter<T>);
 
                 TypeBuilder type = dynamicModule.DefineType(
-                    "DataContractDatumConverterFactory." + typeof(T).FullName,
+                    "DataContractDatumConverterFactory." + typeof(T).GetTypeInfo().FullName,
                     TypeAttributes.Class | TypeAttributes.Public,
                     baseClass
                 );
@@ -77,7 +72,7 @@ namespace RethinkDb.DatumConverters
                 DefineConvertObject<T>(type, datumConverterFactoryField);
                 DefineGetDatumFieldName<T>(type);
 
-                Type finalType = type.CreateType();
+                Type finalType = type.CreateTypeInfo().AsType();
                 //assemblyBuilder.Save("DataContractDynamicAssembly.dll");
                 return finalType;
 
@@ -181,7 +176,7 @@ namespace RethinkDb.DatumConverters
                 gen.Emit(OpCodes.Ldloc, keyValue);
                 gen.Emit(OpCodes.Callvirt, typeof(Spec.Datum.AssocPair).GetProperty("key").GetGetMethod());
                 gen.Emit(OpCodes.Ldstr, fieldName);
-                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string), typeof(string) }, null));
+                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", new Type[] { typeof(string), typeof(string) }));
                 // if false, skip
                 gen.Emit(OpCodes.Brfalse, keyCheckFail);
 
@@ -190,7 +185,7 @@ namespace RethinkDb.DatumConverters
                 gen.Emit(OpCodes.Ldloc, factory);
                 gen.Emit(OpCodes.Call,
                     typeof(DatumConverterFactoryExtensions)
-                        .GetMethod("Get", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(IDatumConverterFactory) }, null)
+                        .GetMethod("Get", new Type[] { typeof(IDatumConverterFactory) })
                          .MakeGenericMethod(field.FieldType));
                 gen.Emit(OpCodes.Ldloc, keyValue);
                 gen.Emit(OpCodes.Callvirt, typeof(Spec.Datum.AssocPair).GetProperty("val").GetGetMethod());
@@ -251,7 +246,7 @@ namespace RethinkDb.DatumConverters
                 gen.Emit(OpCodes.Ldloc, keyValue);
                 gen.Emit(OpCodes.Callvirt, typeof(Spec.Datum.AssocPair).GetProperty("key").GetGetMethod());
                 gen.Emit(OpCodes.Ldstr, propertyName);
-                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string), typeof(string) }, null));
+                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", new Type[] { typeof(string), typeof(string) }));
                 // if false, skip
                 gen.Emit(OpCodes.Brfalse, keyCheckFail);
 
@@ -260,7 +255,7 @@ namespace RethinkDb.DatumConverters
                 gen.Emit(OpCodes.Ldloc, factory);
                 gen.Emit(OpCodes.Call,
                     typeof(DatumConverterFactoryExtensions)
-                        .GetMethod("Get", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(IDatumConverterFactory) }, null)
+                        .GetMethod("Get", new Type[] { typeof(IDatumConverterFactory) })
                          .MakeGenericMethod(property.PropertyType));
                 gen.Emit(OpCodes.Ldloc, keyValue);
                 gen.Emit(OpCodes.Callvirt, typeof(Spec.Datum.AssocPair).GetProperty("val").GetGetMethod());
@@ -354,7 +349,7 @@ namespace RethinkDb.DatumConverters
 
                     skipInclude = gen.DefineLabel();
 
-                    if (field.FieldType.IsPrimitive)
+                    if (field.FieldType.GetTypeInfo().IsPrimitive)
                     {
                         gen.Emit(OpCodes.Ldarg_1);
                         gen.Emit(OpCodes.Ldfld, field);
@@ -377,7 +372,7 @@ namespace RethinkDb.DatumConverters
                 gen.Emit(OpCodes.Ldloc, factory);
                 gen.Emit(OpCodes.Call,
                     typeof(DatumConverterFactoryExtensions)
-                        .GetMethod("Get", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(IDatumConverterFactory) }, null)
+                        .GetMethod("Get", new Type[] { typeof(IDatumConverterFactory) })
                          .MakeGenericMethod(field.FieldType));
                 gen.Emit(OpCodes.Ldarg_1);
                 gen.Emit(OpCodes.Ldfld, field);
@@ -425,7 +420,7 @@ namespace RethinkDb.DatumConverters
 
                     skipInclude = gen.DefineLabel();
 
-                    if (property.PropertyType.IsPrimitive)
+                    if (property.PropertyType.GetTypeInfo().IsPrimitive)
                     {
                         gen.Emit(OpCodes.Ldarg_1);
                         gen.Emit(OpCodes.Callvirt, property.GetGetMethod());
@@ -448,7 +443,7 @@ namespace RethinkDb.DatumConverters
                 gen.Emit(OpCodes.Ldloc, factory);
                 gen.Emit(OpCodes.Call,
                     typeof(DatumConverterFactoryExtensions)
-                        .GetMethod("Get", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(IDatumConverterFactory) }, null)
+                        .GetMethod("Get", new Type[] { typeof(IDatumConverterFactory) })
                          .MakeGenericMethod(property.PropertyType));
                 gen.Emit(OpCodes.Ldarg_1);
                 gen.Emit(OpCodes.Callvirt, property.GetGetMethod());
@@ -525,7 +520,7 @@ namespace RethinkDb.DatumConverters
 
                 gen.Emit(OpCodes.Ldloc, memberName);
                 gen.Emit(OpCodes.Ldstr, field.Name); // the actual field name...
-                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string), typeof(string) }, null));
+                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", new Type[] { typeof(string), typeof(string) }));
                 gen.Emit(OpCodes.Brfalse, nopeWrongField);
 
                 gen.Emit(OpCodes.Ldstr, fieldName); // the dataMemberAttribute's field name
@@ -550,7 +545,7 @@ namespace RethinkDb.DatumConverters
 
                 gen.Emit(OpCodes.Ldloc, memberName);
                 gen.Emit(OpCodes.Ldstr, property.Name); // the actual field name...
-                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", BindingFlags.Static | BindingFlags.Public, null, new Type[] { typeof(string), typeof(string) }, null));
+                gen.Emit(OpCodes.Call, typeof(string).GetMethod("Equals", new Type[] { typeof(string), typeof(string) }));
                 gen.Emit(OpCodes.Brfalse, nopeWrongField);
 
                 gen.Emit(OpCodes.Ldstr, fieldName); // the dataMemberAttribute's field name
