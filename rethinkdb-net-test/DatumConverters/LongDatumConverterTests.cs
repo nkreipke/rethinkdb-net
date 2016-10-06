@@ -8,24 +8,27 @@ namespace RethinkDb.Test.DatumConverters
     public class LongDatumConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooLargeToRepresentAsLongProperly_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<long>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 10000.0 + long.MaxValue});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<long>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 10000.0 + long.MaxValue});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooSmallToRepresentAsLongProperly_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<long>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = long.MinValue - 10000.0});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<long>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = long.MinValue - 10000.0});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueIsFraction_ThrowsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<long>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<long>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

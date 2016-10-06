@@ -8,24 +8,27 @@ namespace RethinkDb.Test.DatumConverters
     public class SignedByteDatumConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooLarge_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<sbyte>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 1.0 + sbyte.MaxValue});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<sbyte>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 1.0 + sbyte.MaxValue});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooSmall_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<sbyte>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = sbyte.MinValue - 1.0});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<sbyte>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = sbyte.MinValue - 1.0});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueIsFraction_ThrowsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<sbyte>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<sbyte>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

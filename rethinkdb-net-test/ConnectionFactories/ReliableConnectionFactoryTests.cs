@@ -68,7 +68,7 @@ namespace RethinkDb.Test.ConnectionFactories
             var errorConnection = Substitute.For<IConnection>();
             errorConnection
                 .RunAsync(Arg.Any<IQueryConverter>(), (ISingleObjectQuery<int>)null, Arg.Any<CancellationToken>())
-                .Returns(x => { throw new RethinkDbNetworkException("!"); });
+                .Returns((Func<NSubstitute.Core.CallInfo, Task<int>>)(x => { throw new RethinkDbNetworkException("!"); }));
 
             var successConnection = Substitute.For<IConnection>();
             successConnection

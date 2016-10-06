@@ -8,17 +8,19 @@ namespace RethinkDb.Test.DatumConverters
     public class DecimalDatumConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooLargeToRepresentAsLongProperly_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<decimal>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 1.0 + (double)decimal.MaxValue});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<decimal>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 1.0 + (double)decimal.MaxValue});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooSmallToRepresentAsLongProperly_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<decimal>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = (double)decimal.MinValue - 1.0});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<decimal>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = (double)decimal.MinValue - 1.0});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

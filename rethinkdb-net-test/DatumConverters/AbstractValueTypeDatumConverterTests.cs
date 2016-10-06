@@ -34,11 +34,13 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void NonGenericConvertDatumNull()
         {
             var dc = (IDatumConverter)new TestDatumConverter();
-            dc.ConvertDatum(new Datum() { type = Datum.DatumType.R_NULL });
+
+            Assert.That((TestDelegate)(() => {
+                dc.ConvertDatum(new Datum() { type = Datum.DatumType.R_NULL });
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -52,11 +54,13 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void NonGenericConvertObjectNull()
         {
             var dc = (IDatumConverter)new TestDatumConverter();
-            dc.ConvertObject(null);
+
+            Assert.That((TestDelegate)(() => {
+                dc.ConvertObject(null);
+            }), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

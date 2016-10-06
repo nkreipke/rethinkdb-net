@@ -14,7 +14,7 @@ namespace RethinkDb.Test.DatumConverters
     {
         private IDatumConverterFactory datumConverterFactory;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             datumConverterFactory = Substitute.For<IDatumConverterFactory>();

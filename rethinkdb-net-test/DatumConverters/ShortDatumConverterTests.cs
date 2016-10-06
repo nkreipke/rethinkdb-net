@@ -8,24 +8,27 @@ namespace RethinkDb.Test.DatumConverters
     public class ShortDatumConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooLarge_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<short>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 1.0 + short.MaxValue});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<short>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 1.0 + short.MaxValue});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooSmall_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<short>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = short.MinValue - 1.0});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<short>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = short.MinValue - 1.0});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueIsFraction_ThrowsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<short>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<short>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

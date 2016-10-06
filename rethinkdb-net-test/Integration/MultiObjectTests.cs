@@ -696,7 +696,7 @@ namespace RethinkDb.Test.Integration
             foreach (var testObject in enumerable)
             {
                 count++;
-                Assert.That(testObject.Name, Is.StringStarting("C"));
+                Assert.That(testObject.Name, Does.StartWith("C"));
             }
             Assert.That(count, Is.EqualTo(4));
         }
@@ -710,7 +710,7 @@ namespace RethinkDb.Test.Integration
             foreach (var testObject in enumerable)
             {
                 count++;
-                Assert.That(testObject.Name, Is.StringStarting("C"));
+                Assert.That(testObject.Name, Does.StartWith("C"));
             }
             Assert.That(count, Is.EqualTo(4));
         }
@@ -724,7 +724,7 @@ namespace RethinkDb.Test.Integration
             foreach (var testObject in enumerable)
             {
                 count++;
-                Assert.That(testObject.Name, Is.StringStarting("C"));
+                Assert.That(testObject.Name, Does.StartWith("C"));
             }
             Assert.That(count, Is.EqualTo(4));
         }

@@ -8,24 +8,27 @@ namespace RethinkDb.Test.DatumConverters
     public class UnsignedLongDatumConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooLargeToRepresentAsLongProperly_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<ulong>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 10000.0 + ulong.MaxValue});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<ulong>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 10000.0 + ulong.MaxValue});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueTooSmallToRepresentAsLongProperly_ThrowException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<ulong>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = ulong.MinValue - 1.0});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<ulong>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = ulong.MinValue - 1.0});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ValueIsFraction_ThrowsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<ulong>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<ulong>().ConvertDatum(new RethinkDb.Spec.Datum(){type = RethinkDb.Spec.Datum.DatumType.R_NUM, r_num = 0.25});
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

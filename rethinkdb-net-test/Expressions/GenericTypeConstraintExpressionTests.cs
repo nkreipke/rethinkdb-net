@@ -24,7 +24,7 @@ namespace RethinkDb.Test.Expressions
         IExpressionConverterFactory expressionConverterFactory;
         IQueryConverter queryConverter;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             datumConverterFactory = new AggregateDatumConverterFactory(

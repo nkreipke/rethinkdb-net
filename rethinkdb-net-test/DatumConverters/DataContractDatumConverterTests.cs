@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using NSubstitute;
@@ -46,7 +47,7 @@ namespace RethinkDb.Test.DatumConverters
         private IDatumConverter<TestObjectStructEmitDefaultValueField> testObjectStructEmitDefaultValueFieldConverter;
         private IDatumConverter<TestObjectStructEmitDefaultValueProperty> testObjectStructEmitDefaultValuePropertyConverter;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             var datumConverterFactory = Substitute.For<IDatumConverterFactory>();
@@ -157,7 +158,7 @@ namespace RethinkDb.Test.DatumConverters
             Assert.That(testObject2Converter, Is.InstanceOf(typeof(IObjectDatumConverter)));
 
             var objectDatumConverter = ((IObjectDatumConverter)testObject2Converter);
-            var field = typeof(TestObject2).GetField("Name");
+            var field = typeof(TestObject2).GetTypeInfo().GetField("Name");
 
             Assert.That(objectDatumConverter.GetDatumFieldName(field), Is.EqualTo("name"));
         }
@@ -168,7 +169,7 @@ namespace RethinkDb.Test.DatumConverters
             Assert.That(testObject4Converter, Is.InstanceOf(typeof(IObjectDatumConverter)));
 
             var objectDatumConverter = ((IObjectDatumConverter)testObject4Converter);
-            var property = typeof(TestObject4).GetProperty("Name");
+            var property = typeof(TestObject4).GetTypeInfo().GetProperty("Name");
 
             Assert.That(objectDatumConverter.GetDatumFieldName(property), Is.EqualTo("name"));
         }

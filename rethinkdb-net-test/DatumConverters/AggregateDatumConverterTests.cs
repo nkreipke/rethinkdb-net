@@ -22,12 +22,13 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ReturnsExceptionWhenNotAvaliable_Single()
         {
             var fact = new AggregateDatumConverterFactory(PrimitiveDatumConverterFactory.Instance);
-            var stringConverter = fact.Get<DateTime>();
-            Assert.That(stringConverter, Is.Null);
+
+            Assert.That((TestDelegate)(() => {
+                fact.Get<DateTime>();
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -46,13 +47,14 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ReturnsExceptionWhenNotAvaliable_Multiple()
         {
             var fact = new AggregateDatumConverterFactory(PrimitiveDatumConverterFactory.Instance,
                                                           TupleDatumConverterFactory.Instance);
-            var stringConverter = fact.Get<DateTime>();
-            Assert.That(stringConverter, Is.Null);
+
+            Assert.That((TestDelegate)(() => {
+                fact.Get<DateTime>();
+            }), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

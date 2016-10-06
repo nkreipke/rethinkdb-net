@@ -18,17 +18,19 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_NullReturnsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<bool>().ConvertDatum(new Datum { type = Datum.DatumType.R_NULL });
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<bool>().ConvertDatum(new Datum { type = Datum.DatumType.R_NULL });
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_UnsupportedTypeReturnsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<bool>().ConvertDatum(new Datum { type = Datum.DatumType.R_NUM });
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<bool>().ConvertDatum(new Datum { type = Datum.DatumType.R_NUM });
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
@@ -41,10 +43,11 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertObject_Null_ThrowsException()
         {
-            PrimitiveDatumConverterFactory.Instance.Get<bool>().ConvertObject(null);
+            Assert.That((TestDelegate)(() => {
+                PrimitiveDatumConverterFactory.Instance.Get<bool>().ConvertObject(null);
+            }), Throws.TypeOf<NotSupportedException>());
         }
     }
 }

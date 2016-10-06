@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using System.Diagnostics;
-using System.Configuration;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -10,6 +9,8 @@ using System.Threading;
 using RethinkDb.Configuration;
 using System.Net.Sockets;
 using System.Net;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Configuration;
 
 namespace RethinkDb.Test.Integration
 {
@@ -18,13 +19,13 @@ namespace RethinkDb.Test.Integration
     {
         protected Process rethinkProcess;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             StartRethinkDb();
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void Teardown()
         {
             if (rethinkProcess != null)
@@ -50,18 +51,13 @@ namespace RethinkDb.Test.Integration
 
         private IPEndPoint GetRethinkEndpoint()
         {
-            var clientSection = ConfigurationManager.GetSection("rethinkdb") as RethinkDbClientSection;
-            foreach (ClusterElement cluster in clientSection.Clusters)
-            {
-                if (cluster.Name == "testCluster")
-                {
-                    // assume a single shard for now
-                    foreach (EndPointElement ep in cluster.EndPoints)
-                        return new IPEndPoint(IPAddress.Parse(ep.Address), ep.Port);
-                }
-            }
+            var configuration = new RethinkDbClientSection();
 
-            return null;
+            new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build().Bind(configuration);
+            Validator.ValidateObject(configuration, new ValidationContext(configuration));
+
+            var endpoint = configuration.Clusters.Single(c => c.Name == "testCluster").EndPoints.Single();
+            return new IPEndPoint(IPAddress.Parse(endpoint.Address), endpoint.Port);
         }
 
         private bool IsEndpointAvailable(IPEndPoint endpoint)
@@ -70,7 +66,7 @@ namespace RethinkDb.Test.Integration
             {
                 try
                 {
-                    c.Connect(endpoint);
+                    c.ConnectAsync(endpoint.Address, endpoint.Port).Wait();
                 } catch (Exception)
                 {
                     return false;
@@ -92,9 +88,7 @@ namespace RethinkDb.Test.Integration
             if (rethinkEndpoint == null || IsEndpointAvailable(rethinkEndpoint))
                 return;
 
-            var solutionPath = Path.GetDirectoryName((new System.Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath);
-
-            var dbPath = Path.Combine(solutionPath, "rethink");
+            var dbPath = Path.Combine(Path.GetTempPath(), "rethink-integration-test");
 
             if (Directory.Exists(dbPath))
                 Directory.Delete(dbPath, true);

@@ -15,7 +15,7 @@ namespace RethinkDb.Test.Integration
 
         protected IConnection connection;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void TestFixtureSetUp()
         {
             try
@@ -44,7 +44,7 @@ namespace RethinkDb.Test.Integration
             }
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public virtual void TestFixtureTearDown()
         {
             connection.Dispose();

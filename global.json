@@ -1,0 +1,6 @@
+{
+    "projects": [
+        "rethinkdb-net",
+        "rethinkdb-net-test"
+    ]
+}

@@ -13,7 +13,7 @@ namespace RethinkDb.Test.Integration
     public class ConnectTests
     {
         [Test]
-        [Timeout(10000)]
+        //[Timeout(10000)]
         [Explicit]
         public void Timeout()
         {

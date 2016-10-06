@@ -10,7 +10,7 @@ namespace RethinkDb.Test.DatumConverters
     {
         private IDatumConverter<int?> datumConverter;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             datumConverter = new AggregateDatumConverterFactory(

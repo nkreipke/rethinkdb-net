@@ -42,7 +42,6 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_Timezone_ThrowsException()
         {
             var datum = new Datum() {
@@ -69,7 +68,10 @@ namespace RethinkDb.Test.DatumConverters
                     r_str = "+01:00"
                 }
             });
-            DateTimeDatumConverterFactory.Instance.Get<DateTime>().ConvertDatum(datum);
+
+            Assert.That((TestDelegate)(() => {
+                DateTimeDatumConverterFactory.Instance.Get<DateTime>().ConvertDatum(datum);
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

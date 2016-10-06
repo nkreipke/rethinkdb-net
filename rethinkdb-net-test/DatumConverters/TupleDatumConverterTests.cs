@@ -12,7 +12,7 @@ namespace RethinkDb.Test.DatumConverters
     {
         private IDatumConverterFactory datumConverterFactory;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             datumConverterFactory = Substitute.For<IDatumConverterFactory>();
@@ -54,41 +54,47 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertDatum_Array_ExceptionOnSizeMismatch()
         {
             string[] expected = {"one","two","three"};
             var datum = new RethinkDb.Spec.Datum {type = RethinkDb.Spec.Datum.DatumType.R_ARRAY};
             datum.r_array.AddRange(expected.Select(DatumHelpers.ToDatum));
 
-            TupleDatumConverterFactory.Instance.Get<Tuple<string, string>>(datumConverterFactory).ConvertDatum(datum);
+            Assert.That((TestDelegate)(() => {
+                TupleDatumConverterFactory.Instance.Get<Tuple<string, string>>(datumConverterFactory).ConvertDatum(datum);
+            }), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_ExceptionOnUnsupportedType()
         {
             var datum = new RethinkDb.Spec.Datum {type = RethinkDb.Spec.Datum.DatumType.R_NUM};
-            TupleDatumConverterFactory.Instance.Get<Tuple<string, string>>(datumConverterFactory).ConvertDatum(datum);
+
+            Assert.That((TestDelegate)(() => {
+                TupleDatumConverterFactory.Instance.Get<Tuple<string, string>>(datumConverterFactory).ConvertDatum(datum);
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatum_Object_ExceptionOnInvalidTupleSize()
         {
             var datum = new RethinkDb.Spec.Datum {type = RethinkDb.Spec.Datum.DatumType.R_OBJECT};
-            TupleDatumConverterFactory.Instance.Get<Tuple<string, string, string>>(datumConverterFactory).ConvertDatum(datum);
+
+            Assert.That((TestDelegate)(() => {
+                TupleDatumConverterFactory.Instance.Get<Tuple<string, string, string>>(datumConverterFactory).ConvertDatum(datum);
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertDatum_Object_ExceptionOnInvalidKey()
         {
             var datum = new RethinkDb.Spec.Datum {type = RethinkDb.Spec.Datum.DatumType.R_OBJECT};
             datum.r_object.Add(new Datum.AssocPair { key = "hi", val = null });
             datum.r_object.Add(new Datum.AssocPair { key = "group", val = null });
 
-            TupleDatumConverterFactory.Instance.Get<Tuple<string, string>>(datumConverterFactory).ConvertDatum(datum);
+            Assert.That((TestDelegate)(() => {
+                TupleDatumConverterFactory.Instance.Get<Tuple<string, string>>(datumConverterFactory).ConvertDatum(datum);
+            }), Throws.TypeOf<InvalidOperationException>());
         }
 
         [Test]

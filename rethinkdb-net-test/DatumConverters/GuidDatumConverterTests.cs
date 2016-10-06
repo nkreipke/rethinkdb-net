@@ -18,12 +18,13 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
         public void ConvertDatum_InvalidGuid_ThrowsException()
         {
             var guidString = "NonsenseStringThatDoesNotSerializeToGuid";
 
-            GuidDatumConverterFactory.Instance.Get<Guid>().ConvertDatum(new RethinkDb.Spec.Datum() {type = RethinkDb.Spec.Datum.DatumType.R_STR, r_str = guidString});
+            Assert.That((TestDelegate)(() => {
+                GuidDatumConverterFactory.Instance.Get<Guid>().ConvertDatum(new RethinkDb.Spec.Datum() {type = RethinkDb.Spec.Datum.DatumType.R_STR, r_str = guidString});
+            }), Throws.TypeOf<Exception>());
         }
 
         [Test]

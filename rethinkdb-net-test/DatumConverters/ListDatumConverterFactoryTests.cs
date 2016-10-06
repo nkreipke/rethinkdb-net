@@ -12,7 +12,7 @@ namespace RethinkDb.Test
     {
         private IDatumConverterFactory rootDatumConverterFactory;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             var stringDatum = new Datum() {

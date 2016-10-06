@@ -10,7 +10,7 @@ namespace RethinkDb.Test.DatumConverters
     {
         private IDatumConverter<TimeSpan> datumConverter;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             datumConverter = TimeSpanDatumConverterFactory.Instance.Get<TimeSpan>();
@@ -28,14 +28,16 @@ namespace RethinkDb.Test.DatumConverters
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertDatumWrongType()
         {
             var datum = new Datum() {
                 type = Datum.DatumType.R_STR,
                 r_str = "60",
             };
-            datumConverter.ConvertDatum(datum);
+
+            Assert.That((TestDelegate)(() => {
+                datumConverter.ConvertDatum(datum);
+            }), Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

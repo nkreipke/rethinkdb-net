@@ -281,7 +281,7 @@ namespace RethinkDb.Test.Integration
 
         // Unit test for async/sync deadlock, mfenniak/rethinkdb-net#112.
         [Test]
-        [Timeout(1000)]
+        //[Timeout(1000)]
         public void MixAsyncSyncPatternDeadlock()
         {
             DoMixAsyncSyncPatternDeadlock().Wait();

@@ -14,7 +14,7 @@ namespace RethinkDb.Test.QueryTests
         private IExpressionConverterFactory expressionConverterFactory = new RethinkDb.Expressions.DefaultExpressionConverterFactory();
         private IQueryConverter queryConverter;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             datumConverterFactory = Substitute.For<IDatumConverterFactory>();

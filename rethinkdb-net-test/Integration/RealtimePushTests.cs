@@ -175,7 +175,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithPrimaryKey()
         {
             RealtimePushTestTwoResponses(
@@ -204,7 +204,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithTable()
         {
             RealtimePushTestSingleResponse(
@@ -224,7 +224,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithBetween()
         {
             RealtimePushTestSingleResponse(
@@ -244,7 +244,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithFilter()
         {
             RealtimePushTestSingleResponse(
@@ -264,7 +264,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithMap()
         {
             RealtimePushTestSingleResponse(
@@ -284,7 +284,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithOrderByLimit()
         {
             RealtimePushTestTwoResponses(
@@ -313,7 +313,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithUnion()
         {
             RealtimePushTestSingleResponse(
@@ -333,7 +333,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithMin()
         {
             RealtimePushTestTwoResponses(
@@ -362,7 +362,7 @@ namespace RethinkDb.Test.Integration
         }
 
         [Test]
-        [Timeout(30000)]
+        //[Timeout(30000)]
         public void ChangesWithMax()
         {
             RealtimePushTestTwoResponses(
