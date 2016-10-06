@@ -6,7 +6,9 @@ namespace RethinkDb
     /// <summary>
     /// Exception thrown when network connectivity errors occur.
     /// </summary>
+#if !NETSTANDARD
     [Serializable]
+#endif
     public class RethinkDbNetworkException : RethinkDbException
     {
         internal RethinkDbNetworkException(string message)
@@ -19,10 +21,12 @@ namespace RethinkDb
         {
         }
 
-        protected RethinkDbNetworkException(SerializationInfo info, StreamingContext context)
+#if !NETSTANDARD
+         protected RethinkDbNetworkException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
     }
 }
 

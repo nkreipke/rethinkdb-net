@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using RethinkDb.Spec;
 
 namespace RethinkDb.DatumConverters
@@ -20,7 +21,9 @@ namespace RethinkDb.DatumConverters
             if (rootDatumConverterFactory == null)
                 throw new ArgumentNullException("rootDatumConverterFactory");
 
-            if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(IGroupingDictionary<,>))
+            var tInfo = typeof(T).GetTypeInfo();
+
+            if (tInfo.IsGenericType && tInfo.GetGenericTypeDefinition() == typeof(IGroupingDictionary<,>))
             {
                 Type converterType = typeof(GroupingDictionaryDatumConverter<,>).MakeGenericType(typeof(T).GetGenericArguments());
                 datumConverter = (IDatumConverter<T>)Activator.CreateInstance(converterType, rootDatumConverterFactory);

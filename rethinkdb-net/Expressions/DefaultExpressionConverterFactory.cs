@@ -44,7 +44,7 @@ namespace RethinkDb.Expressions
 
         private MethodInfo GetMostGenericVersionOfMethod(MethodInfo method)
         {
-            if (method.DeclaringType.IsGenericType)
+            if (method.DeclaringType.GetTypeInfo().IsGenericType)
             {
                 Type declaringType = method.DeclaringType;
                 Type genericTypeDefinition = declaringType.GetGenericTypeDefinition();
@@ -101,7 +101,7 @@ namespace RethinkDb.Expressions
 
         public void RegisterMemberAccessMapping(Type targetType, string memberName, ExpressionMappingDelegate<MemberExpression> memberAccessMapping)
         {
-            if (targetType.IsGenericType)
+            if (targetType.GetTypeInfo().IsGenericType)
                 targetType = targetType.GetGenericTypeDefinition();
 
             memberAccessMappingRegistry[Tuple.Create(targetType, memberName)] = memberAccessMapping;
@@ -133,7 +133,7 @@ namespace RethinkDb.Expressions
             if (memberAccessMappingRegistry.TryGetValue(Tuple.Create(member.DeclaringType, member.Name), out memberAccessMapping))
                 return true;
 
-            if (member.DeclaringType.IsGenericType)
+            if (member.DeclaringType.GetTypeInfo().IsGenericType)
             {
                 if (memberAccessMappingRegistry.TryGetValue(Tuple.Create(member.DeclaringType.GetGenericTypeDefinition(), member.Name), out memberAccessMapping))
                     return true;

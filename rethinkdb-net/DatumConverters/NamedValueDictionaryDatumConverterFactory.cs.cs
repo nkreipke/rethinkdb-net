@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace RethinkDb.DatumConverters
 {
@@ -18,8 +19,10 @@ namespace RethinkDb.DatumConverters
             if (rootDatumConverterFactory == null)
                 throw new ArgumentNullException("rootDatumConverterFactory");
 
-            if (typeof(T).IsGenericType &&
-                typeof(T).GetGenericTypeDefinition() == typeof(Dictionary<,>) &&
+            var tInfo = typeof(T).GetTypeInfo();
+
+            if (tInfo.IsGenericType &&
+                tInfo.GetGenericTypeDefinition() == typeof(Dictionary<,>) &&
                 typeof(T).GetGenericArguments() [0] == typeof(string))
             {
                 var specificType = typeof(NamedValueDictionaryDatumConverter<>).MakeGenericType(typeof(T).GetGenericArguments()[1]);
@@ -28,8 +31,8 @@ namespace RethinkDb.DatumConverters
                 return true;
             }
 
-            if (typeof(T).IsGenericType &&
-                typeof(T).GetGenericTypeDefinition() == typeof(Dictionary<,>.KeyCollection) &&
+            if (tInfo.IsGenericType &&
+                tInfo.GetGenericTypeDefinition() == typeof(Dictionary<,>.KeyCollection) &&
                 typeof(T).GetGenericArguments() [0] == typeof(string))
             {
                 var specificType = typeof(NamedValueDictionaryKeysDatumConverter<>).MakeGenericType(typeof(T).GetGenericArguments()[1]);
@@ -38,8 +41,8 @@ namespace RethinkDb.DatumConverters
                 return true;
             }
 
-            if (typeof(T).IsGenericType &&
-                typeof(T).GetGenericTypeDefinition() == typeof(Dictionary<,>.ValueCollection) &&
+            if (tInfo.IsGenericType &&
+                tInfo.GetGenericTypeDefinition() == typeof(Dictionary<,>.ValueCollection) &&
                 typeof(T).GetGenericArguments()[0] == typeof(string))
             {
                 var dictionaryConverterType = typeof(NamedValueDictionaryDatumConverter<>).MakeGenericType(typeof(T).GetGenericArguments()[1]);

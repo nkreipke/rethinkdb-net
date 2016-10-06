@@ -30,7 +30,8 @@ namespace RethinkDb.DatumConverters
 
         public bool IsTypeSupported(Type t)
         {
-            if (t.IsClass && t.Name.Contains("Anon") && t.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length == 1)
+            var tInfo = t.GetTypeInfo();
+            if (tInfo.IsClass && t.Name.Contains("Anon") && tInfo.GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Count() == 1)
                 return true;
             return false;
         }
@@ -78,7 +79,7 @@ namespace RethinkDb.DatumConverters
 
                     foreach (var assocPair in datum.r_object)
                     {
-                        var property = properties.Where(pi => String.Equals(pi.Name, assocPair.key, StringComparison.InvariantCultureIgnoreCase)).SingleOrDefault();
+                        var property = properties.Where(pi => String.Equals(pi.Name, assocPair.key, StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
                         if (property == null)
                             throw new InvalidOperationException("Unexpected key/value pair in anonymous-type object: " + assocPair.key);
                         constructorParameters[property.Index] = property.DatumConverter.ConvertDatum(assocPair.val);

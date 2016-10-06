@@ -176,7 +176,7 @@ namespace SineSignal.Ottoman.Serialization
 			EndOfJson  = true;
 			
 			if (ReaderIsOwned)
-				Reader.Close();
+				Reader.Dispose();
 			
 			Reader = null;
 		}

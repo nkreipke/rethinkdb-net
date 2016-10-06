@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using RethinkDb.Spec;
 
 namespace RethinkDb.DatumConverters
@@ -9,7 +10,7 @@ namespace RethinkDb.DatumConverters
         {
             // Theoretically, `where T : class` is what I'd like to do here, but that constraint is difficult to
             // satisfy in some places.
-            if (typeof(T).IsValueType)
+            if (typeof(T).GetTypeInfo().IsValueType)
                 throw new InvalidOperationException("AbstractValueTypeDatumConverter should only be used on value types, not type " + typeof(T));
         }
 

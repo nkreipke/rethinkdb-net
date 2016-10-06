@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using RethinkDb.Spec;
 
 namespace RethinkDb.DatumConverters
@@ -17,7 +18,9 @@ namespace RethinkDb.DatumConverters
             if (rootDatumConverterFactory == null)
                 throw new ArgumentNullException("rootDatumConverterFactory");
 
-            if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>))
+            var tInfo = typeof(T).GetTypeInfo();
+
+            if (tInfo.IsGenericType && tInfo.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 Type converterType = typeof(NullableDatumConverter<>).MakeGenericType(typeof(T).GetGenericArguments()[0]);
                 datumConverter = (IDatumConverter<T>)Activator.CreateInstance(converterType, rootDatumConverterFactory);

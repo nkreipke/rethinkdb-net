@@ -28,7 +28,9 @@ namespace RethinkDb
             QueryConverter = new QueryConverter(
                 new AggregateDatumConverterFactory(
                     PrimitiveDatumConverterFactory.Instance,
+#if !NETSTANDARD
                     DataContractDatumConverterFactory.Instance,
+#endif
                     DateTimeDatumConverterFactory.Instance,
                     DateTimeOffsetDatumConverterFactory.Instance,
                     GuidDatumConverterFactory.Instance,
@@ -173,7 +175,6 @@ namespace RethinkDb
                     {
                         try
                         {
-                            stream.Close();
                             stream.Dispose();
                         }
                         catch (Exception ex)
@@ -186,7 +187,6 @@ namespace RethinkDb
                     {
                         try
                         {
-                            tcpClient.Close();
                             ((IDisposable)tcpClient).Dispose();
                         }
                         catch (Exception ex)
@@ -225,7 +225,6 @@ namespace RethinkDb
                 {
                     try
                     {
-                        stream.Close();
                         stream.Dispose();
                     }
                     catch (Exception ex)
@@ -238,7 +237,6 @@ namespace RethinkDb
                 {
                     try
                     {
-                        tcpClient.Close();
                         ((IDisposable)tcpClient).Dispose();
                     }
                     catch (Exception ex)
@@ -406,7 +404,6 @@ namespace RethinkDb
             private readonly IQueryConverter queryConverter;
             private readonly IDatumConverter<T> datumConverter;
             private readonly ISequenceQuery<T> queryObject;
-            private readonly StackTrace stackTrace;
 
             private Spec.Query query = null;
             private Response lastResponse = null;
@@ -419,7 +416,6 @@ namespace RethinkDb
                 this.queryConverter = queryConverter;
                 this.datumConverter = queryConverter.Get<T>();
                 this.queryObject = queryObject;
-                this.stackTrace = new StackTrace(true);
             }
 
             public IConnection Connection
@@ -447,7 +443,7 @@ namespace RethinkDb
                     if (l != null)
                         return;
 
-                    l.Warning("QueryEnumerator finalizer was called and object was not disposed; originally created at: {0}", stackTrace);
+                    l.Warning("QueryEnumerator finalizer was called and object was not disposed");
                 }
             }
 
@@ -591,7 +587,6 @@ namespace RethinkDb
             {
                 try
                 {
-                    stream.Close();
                     stream.Dispose();
                 }
                 catch (Exception)
@@ -603,7 +598,6 @@ namespace RethinkDb
             {
                 try
                 {
-                    tcpClient.Close();
                     ((IDisposable)tcpClient).Dispose();
                 }
                 catch (Exception)

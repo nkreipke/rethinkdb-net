@@ -19,13 +19,13 @@ namespace RethinkDb.Expressions
         public static void RegisterOnConverterFactory(DefaultExpressionConverterFactory expressionConverterFactory)
         {
             var appendDelegate = (AppendDelegate<int>)ReQLExpression.Append;
-            expressionConverterFactory.RegisterMethodCallMapping(appendDelegate.Method, ConvertAppendToTerm);
+            expressionConverterFactory.RegisterMethodCallMapping(appendDelegate.GetMethodInfo(), ConvertAppendToTerm);
 
             var whereDelegate = (WhereDelegate<int>)Enumerable.Where;
-            expressionConverterFactory.RegisterMethodCallMapping(whereDelegate.Method, ConvertEnumerableWhereToTerm);
+            expressionConverterFactory.RegisterMethodCallMapping(whereDelegate.GetMethodInfo(), ConvertEnumerableWhereToTerm);
 
             var anyDelegate = (AnyDelegate<int>)Enumerable.Any;
-            expressionConverterFactory.RegisterMethodCallMapping(anyDelegate.Method, ConvertEnumerableAnyToTerm);
+            expressionConverterFactory.RegisterMethodCallMapping(anyDelegate.GetMethodInfo(), ConvertEnumerableAnyToTerm);
 
             expressionConverterFactory.RegisterTemplateMapping<IEnumerable<int>, int, bool>(
                 (list, arg) => list.Contains(arg),

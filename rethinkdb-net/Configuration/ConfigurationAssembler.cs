@@ -1,21 +1,24 @@
 ﻿using System;
-using System.Configuration;
 using System.Net;
 using System.Collections.Generic;
 using RethinkDb.Logging;
 using RethinkDb.ConnectionFactories;
 
+#if NETSTANDARD
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.Configuration;
+#else
+using System.Configuration;
+#endif
+
 namespace RethinkDb.Configuration
 {
     public class ConfigurationAssembler
     {
-        internal static readonly Lazy<RethinkDbClientSection> DefaultSettings = new Lazy<RethinkDbClientSection>(() => ConfigurationManager.GetSection("rethinkdb") as RethinkDbClientSection);
+        internal static readonly Lazy<RethinkDbClientSection> DefaultSettings = new Lazy<RethinkDbClientSection>(() => GetDefaultSettings());
 
         public static IConnectionFactory CreateConnectionFactory(string clusterName)
         {
-            if (DefaultSettings.Value == null)
-                throw new ConfigurationErrorsException("No rethinkdb client configuration section located");
-
             foreach (ClusterElement cluster in DefaultSettings.Value.Clusters)
             {
                 if (cluster.Name == clusterName)
@@ -62,6 +65,27 @@ namespace RethinkDb.Configuration
 
             return connectionFactory;
         }
+
+#if NETSTANDARD
+        private static RethinkDbClientSection GetDefaultSettings()
+        {
+            var configuration = new RethinkDbClientSection();
+
+            new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build().Bind(configuration);
+            Validator.ValidateObject(configuration, new ValidationContext(configuration));
+
+            return configuration;
+        }
+#else
+        private static RethinkDbClientSection GetDefaultSettings()
+        {
+            var configuration = ConfigurationManager.GetSection("rethinkdb") as RethinkDbClientSection;
+            if (configuration == null)
+                throw new ConfigurationErrorsException("No rethinkdb client configuration section located");
+
+            return configuration;
+        }
+#endif
     }
 }
 

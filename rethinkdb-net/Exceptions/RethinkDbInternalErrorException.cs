@@ -7,7 +7,9 @@ namespace RethinkDb
     /// Exception thrown when errors occur that appear to be the result of errors or bugs in the RethinkDb
     /// client driver.
     /// </summary>
+#if !NETSTANDARD
     [Serializable]
+#endif
     public class RethinkDbInternalErrorException : RethinkDbException
     {
         internal RethinkDbInternalErrorException(string message)
@@ -20,10 +22,12 @@ namespace RethinkDb
         {
         }
 
-        protected RethinkDbInternalErrorException(SerializationInfo info, StreamingContext context)
+#if !NETSTANDARD
+         protected RethinkDbInternalErrorException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
     }
 }
 

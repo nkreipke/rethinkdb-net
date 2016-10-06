@@ -3,7 +3,9 @@ using System.Runtime.Serialization;
 
 namespace RethinkDb
 {
+#if !NETSTANDARD
     [Serializable]
+#endif
     public abstract class RethinkDbException : Exception
     {
         protected RethinkDbException(string message)
@@ -16,10 +18,12 @@ namespace RethinkDb
         {
         }
 
+#if !NETSTANDARD
         protected RethinkDbException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
     }
 }
 

@@ -28,7 +28,7 @@ namespace RethinkDb.DatumConverters
 
         public bool IsTypeSupported(Type t)
         {
-            if (!t.IsGenericType)
+            if (!t.GetTypeInfo().IsGenericType)
                 return false;
 
             var gtd = t.GetGenericTypeDefinition();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using RethinkDb.Spec;
@@ -18,7 +19,7 @@ namespace RethinkDb.DatumConverters
 
             datumConverter = null;
 
-            if (typeof(CompoundIndexKey).IsAssignableFrom(typeof(T)))
+            if (typeof(CompoundIndexKey).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()))
             {
                 var retval = Activator.CreateInstance(
                     typeof(CompoundIndexKeyDatumConverterShim<>).MakeGenericType(typeof(T)),

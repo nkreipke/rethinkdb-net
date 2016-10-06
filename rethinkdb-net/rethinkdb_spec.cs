@@ -10,7 +10,7 @@
 // Generated from: RethinkDb.Spec.proto
 namespace RethinkDb.Spec
 {
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"VersionDummy")]
+  [global::ProtoBuf.ProtoContract(Name=@"VersionDummy")]
   public partial class VersionDummy : global::ProtoBuf.IExtensible
   {
     public VersionDummy() {}
@@ -48,7 +48,7 @@ namespace RethinkDb.Spec
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Query")]
+  [global::ProtoBuf.ProtoContract(Name=@"Query")]
   public partial class Query : global::ProtoBuf.IExtensible
   {
     public Query() {}
@@ -105,7 +105,7 @@ namespace RethinkDb.Spec
       get { return _global_optargs; }
     }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AssocPair")]
+  [global::ProtoBuf.ProtoContract(Name=@"AssocPair")]
   public partial class AssocPair : global::ProtoBuf.IExtensible
   {
     public AssocPair() {}
@@ -155,7 +155,7 @@ namespace RethinkDb.Spec
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Frame")]
+  [global::ProtoBuf.ProtoContract(Name=@"Frame")]
   public partial class Frame : global::ProtoBuf.IExtensible
   {
     public Frame() {}
@@ -203,7 +203,7 @@ namespace RethinkDb.Spec
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Backtrace")]
+  [global::ProtoBuf.ProtoContract(Name=@"Backtrace")]
   public partial class Backtrace : global::ProtoBuf.IExtensible
   {
     public Backtrace() {}
@@ -220,7 +220,7 @@ namespace RethinkDb.Spec
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Response")]
+  [global::ProtoBuf.ProtoContract(Name=@"Response")]
   public partial class Response : global::ProtoBuf.IExtensible
   {
     public Response() {}
@@ -326,7 +326,7 @@ namespace RethinkDb.Spec
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Datum")]
+  [global::ProtoBuf.ProtoContract(Name=@"Datum")]
   public partial class Datum : global::ProtoBuf.IExtensible
   {
     public Datum() {}
@@ -381,7 +381,7 @@ namespace RethinkDb.Spec
       get { return _r_object; }
     }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AssocPair")]
+  [global::ProtoBuf.ProtoContract(Name=@"AssocPair")]
   public partial class AssocPair : global::ProtoBuf.IExtensible
   {
     public AssocPair() {}
@@ -440,7 +440,7 @@ namespace RethinkDb.Spec
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Term")]
+  [global::ProtoBuf.ProtoContract(Name=@"Term")]
   public partial class Term : global::ProtoBuf.IExtensible
   {
     public Term() {}
@@ -477,7 +477,7 @@ namespace RethinkDb.Spec
       get { return _optargs; }
     }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AssocPair")]
+  [global::ProtoBuf.ProtoContract(Name=@"AssocPair")]
   public partial class AssocPair : global::ProtoBuf.IExtensible
   {
     public AssocPair() {}

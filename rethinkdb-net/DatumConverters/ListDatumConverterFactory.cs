@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using RethinkDb.Spec;
 
 namespace RethinkDb.DatumConverters
@@ -15,8 +16,10 @@ namespace RethinkDb.DatumConverters
 
         public override bool TryGet<T>(IDatumConverterFactory rootDatumConverterFactory, out IDatumConverter<T> datumConverter)
         {
-            if (typeof(T).IsGenericType &&
-                typeof(T).GetGenericTypeDefinition().Equals(typeof(List<>)))
+            var tInfo = typeof(T).GetTypeInfo();
+
+            if (tInfo.IsGenericType &&
+                tInfo.GetGenericTypeDefinition().Equals(typeof(List<>)))
             {
                 Type listDatumConverterType = typeof(ListDatumConverter<>).MakeGenericType(
                     typeof(T).GetGenericArguments()[0]
@@ -25,8 +28,8 @@ namespace RethinkDb.DatumConverters
                 return true;
             }
 
-            if (typeof(T).IsGenericType &&
-                typeof(T).GetGenericTypeDefinition().Equals(typeof(IList<>)))
+            if (tInfo.IsGenericType &&
+                tInfo.GetGenericTypeDefinition().Equals(typeof(IList<>)))
             {
                 Type listDatumConverterType = typeof(IListDatumConverter<>).MakeGenericType(
                     typeof(T).GetGenericArguments()[0]

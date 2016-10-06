@@ -60,7 +60,7 @@ namespace RethinkDb.DatumConverters
                         if (nativeTypesExcludingNulls.Length == 1)
                         {
                             Type arrayContentType = nativeTypesExcludingNulls[0];
-                            if (!hasNullValues || !arrayContentType.IsValueType)
+                            if (!hasNullValues || !arrayContentType.GetTypeInfo().IsValueType)
                                 // we either have no nulls, or, this type can be assigned to null, so we just use the type
                                 return arrayContentType.MakeArrayType();
                             else

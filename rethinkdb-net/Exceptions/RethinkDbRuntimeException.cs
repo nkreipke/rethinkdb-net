@@ -7,7 +7,9 @@ namespace RethinkDb
     /// Exception thrown when runtime query failure occurs.  For example, if a query attempts to add two fields
     /// together, but at runtime they are types that don't support that operation (like booleans).
     /// </summary>
+#if !NETSTANDARD
     [Serializable]
+#endif
     public class RethinkDbRuntimeException : RethinkDbException
     {
         internal RethinkDbRuntimeException(string message)
@@ -20,10 +22,12 @@ namespace RethinkDb
         {
         }
 
-        protected RethinkDbRuntimeException(SerializationInfo info, StreamingContext context)
+#if !NETSTANDARD
+         protected RethinkDbRuntimeException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
+#endif
     }
 }
 

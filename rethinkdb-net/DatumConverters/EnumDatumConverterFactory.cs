@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 
 namespace RethinkDb.DatumConverters
 {
@@ -10,7 +11,7 @@ namespace RethinkDb.DatumConverters
         public override bool TryGet<T>(IDatumConverterFactory rootDatumConverterFactory, out IDatumConverter<T> datumConverter)
         {
             datumConverter = null;
-            if (typeof(T).IsEnum)
+            if (typeof(T).GetTypeInfo().IsEnum)
                 datumConverter = EnumDatumConverter<T>.Instance.Value;
             return datumConverter != null;
         }
