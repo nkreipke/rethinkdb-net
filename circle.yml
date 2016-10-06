@@ -6,11 +6,10 @@ dependencies:
   pre:
     - source /etc/lsb-release && echo "deb http://download.rethinkdb.com/apt $DISTRIB_CODENAME main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list
     - wget -qO- http://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
+    - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+    - sudo apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
     - sudo apt-get update
-    - sudo apt-get install rethinkdb curl libunwind8 gettext
-    - curl -sSL -o dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=827530
-    - sudo mkdir -p /opt/dotnet && sudo tar zxf dotnet.tar.gz -C /opt/dotnet
-    - sudo ln -s /opt/dotnet/dotnet /usr/local/bin
+    - sudo apt-get install rethinkdb dotnet-dev-1.0.0-preview2-003131
 
 test:
   override:
