@@ -9,6 +9,10 @@
     "Microsoft.Extensions.Configuration.Binder": "1.0.0"
   },
 
+  "buildOptions": {
+    "outputName": "RethinkDb"
+  },
+
   "frameworks": {
     "net45": {
       "frameworkAssemblies": {

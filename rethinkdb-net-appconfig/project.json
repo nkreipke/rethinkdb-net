@@ -1,11 +1,15 @@
 {
   "version": "0.13.0",
-  "authors": ["Nico Kreipke"],
+  "authors": [ "Nico Kreipke" ],
   "description": "Application configuration loader for rethinkdb-net",
 
   "dependencies": {
     "AutoMapper": "5.1.1",
     "rethinkdb-net": { "target": "project" }
+  },
+
+  "buildOptions": {
+    "outputName": "RethinkDb.AppConfig"
   },
 
   "frameworks": {

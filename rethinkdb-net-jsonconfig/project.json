@@ -8,8 +8,12 @@
     "rethinkdb-net": { "target": "project" }
   },
 
+  "buildOptions": {
+    "outputName": "RethinkDb.JsonConfig"
+  },
+
   "frameworks": {
-    "net451": { },
-    "netstandard1.3": { }
+    "net451": {},
+    "netstandard1.3": {}
   }
 }
