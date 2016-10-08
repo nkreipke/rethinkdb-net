@@ -1,0 +1,19 @@
+{
+  "version": "0.13.0",
+  "authors": ["Nico Kreipke"],
+  "description": "Application configuration loader for rethinkdb-net",
+
+  "dependencies": {
+    "AutoMapper": "5.1.1",
+    "rethinkdb-net": { "target": "project" }
+  },
+
+  "frameworks": {
+    "net45": {
+      "frameworkAssemblies": {
+        "System.ComponentModel.DataAnnotations": "4.0.0.0",
+        "System.Configuration": "4.0.0.0"
+      }
+    }
+  }
+}

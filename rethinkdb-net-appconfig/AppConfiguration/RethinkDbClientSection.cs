@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class RethinkDbClientSection : ConfigurationSection
+    internal class RethinkDbClientSection : ConfigurationSection
     {
         [ConfigurationProperty("clusters", IsRequired = true)]
         public ClusterElementCollection Clusters

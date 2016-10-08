@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class ClusterElementCollection : ConfigurationElementCollection
+    internal class ClusterElementCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {

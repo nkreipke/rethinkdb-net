@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class ConnectionPoolElement : ConfigurationElement
+    internal class ConnectionPoolElement : ConfigurationElement
     {
         [ConfigurationProperty("enabled", IsRequired = true)]
         public bool Enabled

@@ -1,9 +1,9 @@
 ﻿using System.Configuration;
 using RethinkDb.Logging;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class DefaultLoggerElement : ConfigurationElement
+    internal class DefaultLoggerElement : ConfigurationElement
     {
         [ConfigurationProperty("enabled")]
         public bool Enabled

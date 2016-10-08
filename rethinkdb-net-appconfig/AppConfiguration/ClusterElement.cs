@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class ClusterElement : ConfigurationElement
+    internal class ClusterElement : ConfigurationElement
     {
         [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
         public string Name

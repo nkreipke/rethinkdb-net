@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class NetworkErrorHandlingElement : ConfigurationElement
+    internal class NetworkErrorHandlingElement : ConfigurationElement
     {
         [ConfigurationProperty("enabled", IsRequired = true)]
         public bool Enabled

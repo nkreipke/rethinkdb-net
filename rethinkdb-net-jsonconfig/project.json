@@ -1,0 +1,15 @@
+﻿{
+  "version": "0.13.0",
+  "authors": [ "Nico Kreipke" ],
+  "description": "JSON configuration loader for rethinkdb-net",
+
+  "dependencies": {
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "rethinkdb-net": { "target": "project" }
+  },
+
+  "frameworks": {
+    "net451": { },
+    "netstandard1.3": { }
+  }
+}

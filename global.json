@@ -1,6 +1,8 @@
 {
-    "projects": [
-        "rethinkdb-net",
-        "rethinkdb-net-test"
-    ]
+  "projects": [
+    "rethinkdb-net",
+    "rethinkdb-net-test",
+    "rethinkdb-net-appconfig",
+    "rethinkdb-net-jsonconfig"
+  ]
 }

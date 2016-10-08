@@ -5,13 +5,15 @@ using System.Net;
 using System.Linq;
 using System.Threading.Tasks;
 using RethinkDb.Configuration;
+using RethinkDb.ConnectionFactories;
 using RethinkDb.Logging;
+using RethinkDb.JsonConfig;
 
 namespace RethinkDb.Test.Integration
 {
     public class TestBase
     {
-        public static IConnectionFactory ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+        public static IConnectionFactory ConnectionFactory = new ConnectionFactoryBuilder().FromJsonConfiguration().Build("testCluster");
 
         protected IConnection connection;
 

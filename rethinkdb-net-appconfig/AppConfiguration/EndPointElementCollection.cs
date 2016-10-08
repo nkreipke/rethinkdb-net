@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class EndPointElementCollection : ConfigurationElementCollection
+    internal class EndPointElementCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {

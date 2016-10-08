@@ -1,32 +1,30 @@
 {
-    "version": "1.0.0-*",
+  "version": "1.0.0-*",
 
-    "dependencies": {
-        "FluentAssertions": "4.14.0",
-        "NUnit": "3.5.0",
-        "NSubstitute": "2.0.0-rc",
-        "dotnet-test-nunit": "3.4.0-beta-2",
-        "rethinkdb-net": { "target": "project" }
-    },
+  "dependencies": {
+    "FluentAssertions": "4.14.0",
+    "NUnit": "3.5.0",
+    "NSubstitute": "2.0.0-rc",
+    "dotnet-test-nunit": "3.4.0-beta-2",
+    "rethinkdb-net": { "target": "project" },
+    "rethinkdb-net-jsonconfig": { "target": "project" }
+  },
 
-    "buildOptions": {
-        "copyToOutput": "rethinkdb.json"
-    },
+  "buildOptions": {
+    "copyToOutput": "rethinkdb.json"
+  },
 
-    "testRunner": "nunit",
+  "testRunner": "nunit",
 
-    "frameworks": {
-        "netcoreapp1.0": {
-            "imports": "portable-net45+win8",
-            "dependencies": {
-                "Microsoft.NETCore.App": {
-                    "version": "1.0.0-*",
-                    "type": "platform"
-                }
-            },
-            "buildOptions": {
-                "define": ["NETSTANDARD"]
-            }
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "portable-net45+win8",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
         }
+      }
     }
+  }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Configuration;
 
-namespace RethinkDb.Configuration
+namespace RethinkDb.AppConfig
 {
-    public class EndPointElement : ConfigurationElement
+    internal class EndPointElement : ConfigurationElement
     {
         [ConfigurationProperty("address", IsRequired = true, IsKey = true)]
         public string Address
