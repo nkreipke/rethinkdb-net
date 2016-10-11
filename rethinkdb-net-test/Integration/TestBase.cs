@@ -7,13 +7,21 @@ using System.Threading.Tasks;
 using RethinkDb.Configuration;
 using RethinkDb.ConnectionFactories;
 using RethinkDb.Logging;
-using RethinkDb.JsonConfig;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace RethinkDb.Test.Integration
 {
     public class TestBase
     {
-        public static IConnectionFactory ConnectionFactory = new ConnectionFactoryBuilder().FromJsonConfiguration().Build("testCluster");
+        public static IConnectionFactory ConnectionFactory;
+
+        static TestBase()
+        {
+            var config = new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build();
+
+            ConnectionFactory = new ConnectionFactoryBuilder().FromConfiguration(config).Build("testCluster");
+        }
 
         protected IConnection connection;
 
