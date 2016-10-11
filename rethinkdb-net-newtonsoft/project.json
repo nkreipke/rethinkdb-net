@@ -1,0 +1,23 @@
+{
+  "version": "0.13.0",
+  "authors": [ "Brian Chavez" ],
+  "description": "Alternative object serializer for rethinkdb-net using Newtonsoft.Json",
+
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1",
+    "rethinkdb-net": { "target": "project" }
+  },
+
+  "buildOptions": {
+    "outputName": "RethinkDb.Newtonsoft"
+  },
+
+  "frameworks": {
+    "net45": { },
+    "netstandard1.3": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+}

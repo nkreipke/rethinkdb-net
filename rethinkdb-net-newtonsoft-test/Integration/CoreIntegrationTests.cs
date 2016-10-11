@@ -3,10 +3,28 @@ using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RethinkDb.Newtonsoft.Configuration;
+using RethinkDb.Newtonsoft;
+using RethinkDb.ConnectionFactories;
+using RethinkDb.Configuration;
 using RethinkDb.Test.Integration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 
 namespace RethinkDb.Newtonsoft.Test.Integration
 {
+    internal static class CreateConnectionFactory
+    {
+        public static IConnectionFactory Create()
+        {
+            var config = new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build();
+
+            return new ConnectionFactoryBuilder()
+                .FromConfiguration(config)
+                .UseNewtonsoftJsonSerializer()
+                .Build("testCluster");
+        }
+    }
+
     [SetUpFixture]
     public class NIntegrationTestSetup : IntegrationTestSetup
     {
@@ -17,7 +35,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NSingleObjectTest()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -26,7 +44,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NTableTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -35,7 +53,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NMultiTableTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -44,7 +62,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NMultiObjectTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -53,7 +71,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NManyObjectTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -62,7 +80,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NBlankTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -72,7 +90,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NDatabaseTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -82,7 +100,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NGroupingTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -92,7 +110,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NHasFieldsTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -101,7 +119,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NRealtimePushTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
     }
 
@@ -110,7 +128,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static NNamedValueDictionaryTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
 
         protected override void MultipleItemSetterVerifyDictionary(TestObjectWithDictionary gil)

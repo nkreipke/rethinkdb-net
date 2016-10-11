@@ -36,7 +36,7 @@ namespace RethinkDb.Newtonsoft.Test.DatumConversion
                 bool flag = (i + 1) < s.Length;
                 if (((i == 0) || !flag) || Char.IsUpper(s[i + 1]))
                 {
-                    char ch = Char.ToLower(s[i], CultureInfo.InvariantCulture);
+                    char ch = Char.ToLowerInvariant(s[i]);
                     builder.Append(ch);
                 }
                 else

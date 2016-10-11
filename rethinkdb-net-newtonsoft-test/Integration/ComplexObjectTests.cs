@@ -15,7 +15,7 @@ namespace RethinkDb.Newtonsoft.Test.Integration
     {
         static ComplexObjectTests()
         {
-            ConnectionFactory = ConfigurationAssembler.CreateConnectionFactory("testCluster");
+            ConnectionFactory = CreateConnectionFactory.Create();
         }
 
         private ITableQuery<ComplexObject> testTable;

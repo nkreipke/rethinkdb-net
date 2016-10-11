@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using RethinkDb.DatumConverters;
 
 namespace RethinkDb.Newtonsoft.Configuration
@@ -20,7 +21,7 @@ namespace RethinkDb.Newtonsoft.Configuration
 
             //makes no difference to Newtonsoft, but base class constructor 
             //checks this constraint and throws if it's not exactly a Value type converter...
-            if (typeof(T).IsValueType)
+            if (typeof(T).GetTypeInfo().IsValueType)
             {
                 datumConverter = new NewtonsoftValueDatumConverter<T>();
                 return true;

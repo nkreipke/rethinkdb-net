@@ -7,9 +7,11 @@ namespace RethinkDb.Newtonsoft.Configuration
 {
     public class NewtonsoftConnectionFactory : IConnectionFactory
     {
-        public NewtonsoftConnectionFactory(IEnumerable<EndPoint> endPoints)
+        public NewtonsoftConnectionFactory(IEnumerable<EndPoint> endPoints, string authorizationKey, ILogger logger)
         {
             this.EndPoints = endPoints;
+            this.AuthorizationKey = authorizationKey;
+            this.Logger = logger;
         }
 
         public IEnumerable<EndPoint> EndPoints { get; set; }

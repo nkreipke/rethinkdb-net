@@ -3,6 +3,7 @@
     "rethinkdb-net",
     "rethinkdb-net-test",
     "rethinkdb-net-appconfig",
-    "rethinkdb-net-jsonconfig"
+    "rethinkdb-net-newtonsoft",
+    "rethinkdb-net-newtonsoft-test"
   ]
 }
