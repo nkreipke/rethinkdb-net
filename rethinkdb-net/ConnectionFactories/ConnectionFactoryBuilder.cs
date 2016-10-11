@@ -11,6 +11,11 @@ namespace RethinkDb.ConnectionFactories
     {
         public RethinkDbClientSection Configuration { get; set; }
 
+        public Func<IEnumerable<EndPoint>, string, ILogger, IConnectionFactory> BaseFactory { get; set; } = (endpoints, authorizationKey, logger) =>
+        {
+            return new DefaultConnectionFactory(endpoints, authorizationKey, logger);
+        };
+
         /// <summary>
         /// Creates a connection factory.
         /// </summary>
@@ -34,7 +39,7 @@ namespace RethinkDb.ConnectionFactories
         /// Creates a connection factory from a <see cref="RethinkDb.Configuration.ClusterElement" /> object.
         /// </summary>
         /// <param name="cluster">The cluster configuration.</param>
-        public static IConnectionFactory Build(ClusterElement cluster)
+        public IConnectionFactory Build(ClusterElement cluster)
         {
             List<EndPoint> endpoints = new List<EndPoint>();
             foreach (EndPointElement ep in cluster.EndPoints)
@@ -46,13 +51,12 @@ namespace RethinkDb.ConnectionFactories
                     endpoints.Add(new DnsEndPoint(ep.Address, ep.Port));
             }
 
-            IConnectionFactory connectionFactory = new DefaultConnectionFactory(endpoints)
-            {
-                AuthorizationKey = !string.IsNullOrEmpty(cluster.AuthorizationKey) ? 
-                                   cluster.AuthorizationKey : null,
-                Logger = cluster.DefaultLogger != null && cluster.DefaultLogger.Enabled ?
-                         new DefaultLogger(cluster.DefaultLogger.Category, Console.Out) : null
-            };
+            var authorizationKey = !string.IsNullOrEmpty(cluster.AuthorizationKey) ? 
+                                   cluster.AuthorizationKey : null;
+            var logger = cluster.DefaultLogger != null && cluster.DefaultLogger.Enabled ?
+                         new DefaultLogger(cluster.DefaultLogger.Category, Console.Out) : null;  
+
+            var connectionFactory = BaseFactory(endpoints, authorizationKey, logger);
 
             if (cluster.NetworkErrorHandling != null && cluster.NetworkErrorHandling.Enabled)
                 connectionFactory = new ReliableConnectionFactory(connectionFactory);

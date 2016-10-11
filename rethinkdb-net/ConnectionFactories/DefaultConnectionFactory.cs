@@ -11,9 +11,11 @@ namespace RethinkDb.ConnectionFactories
     /// </summary>
     public class DefaultConnectionFactory : IConnectionFactory
     {
-        public DefaultConnectionFactory(IEnumerable<EndPoint> endPoints)
+        public DefaultConnectionFactory(IEnumerable<EndPoint> endPoints, string authorizationKey, ILogger logger)
         {
             this.EndPoints = endPoints;
+            this.AuthorizationKey = authorizationKey;
+            this.Logger = logger;
         }
 
         public IEnumerable<EndPoint> EndPoints
