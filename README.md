@@ -1,4 +1,4 @@
-rethinkdb-net is a RethinkDB client driver written in C# for the .NET platform.  This driver utilizes .NET 4.5 and C# 5.0.
+rethinkdb-net is a RethinkDB client driver written in C# for the .NET platform. This driver is compatible with **.NET 4.5** and **.NET Standard 1.3**.
 
 [![Circle CI](https://circleci.com/gh/mfenniak/rethinkdb-net.svg?style=svg)](https://circleci.com/gh/mfenniak/rethinkdb-net)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/mfenniak/rethinkdb-net?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -14,6 +14,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using RethinkDb;
 using RethinkDb.Configuration;
+using RethinkDb.ConnectionFactories;
+using Microsoft.Extensions.Configuration;
 
 [DataContract]
 public class Person
@@ -30,52 +32,59 @@ public class Person
 
 public static class MainClass
 {
-    private static IConnectionFactory connectionFactory =
-        ConfigurationAssembler.CreateConnectionFactory("example");
-
     public static void Main(string[] args)
     {
-        var conn = connectionFactory.Get();
+        var config = new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build();
+        var factory = new ConnectionFactoryBuilder().FromConfiguration(config).Build("example");
 
-        // Create DB if needed
-        if (!conn.Run(Query.DbList()).Contains("test"))
-            conn.Run(Query.DbCreate("test"));
+        using (var conn = factory.Get())
+        {
+            // Create DB if needed
+            if (!conn.Run(Query.DbList()).Contains("test"))
+                conn.Run(Query.DbCreate("test"));
 
-        // Create table if needed
-        if (!conn.Run(Person.Db.TableList()).Contains("people"))
-            conn.Run(Person.Db.TableCreate("people"));
+            // Create table if needed
+            if (!conn.Run(Person.Db.TableList()).Contains("people"))
+                conn.Run(Person.Db.TableCreate("people"));
 
-        // Read all the contents of the table
-        foreach (var person in conn.Run(Person.Table))
-            Console.WriteLine("Id: {0}, Name: {1}", person.Id, person.Name);
+            // Read all the contents of the table
+            foreach (var person in conn.Run(Person.Table))
+                Console.WriteLine("Id: {0}, Name: {1}", person.Id, person.Name);
 
-        // Insert a new record
-        conn.Run(Person.Table.Insert(new Person() { Name = "Jack Black" }));
+            // Insert a new record
+            conn.Run(Person.Table.Insert(new Person() { Name = "Jack Black" }));
+        }
     }
 }
 ```
 
-App.config:
+rethinkdb.json:
 
-```xml
-<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-    <configSections>
-        <section name="rethinkdb" type="RethinkDb.Configuration.RethinkDbClientSection, RethinkDb"/>
-    </configSections>
-    <rethinkdb>
-        <clusters>
-            <cluster name="example">
-                <defaultLogger enabled="true" category="Warning"/>
-                <connectionPool enabled="true"/>
-                <networkErrorHandling enabled="true" />
-                <endpoints>
-                    <endpoint address="127.0.0.1" port="28015"/>
-                </endpoints>
-            </cluster>
-        </clusters>
-    </rethinkdb>
-</configuration>
+```json
+{
+  "clusters": [
+    {
+      "name": "example",
+      "defaultLogger": {
+        "enabled": "true",
+        "category": "warning"
+      },
+      "connectionPool": {
+        "enabled": true,
+        "queryTimeout": 300
+      },
+      "networkErrorHandling": {
+        "enabled": true
+      },
+      "endpoints": [
+        {
+          "address": "127.0.0.1",
+          "port": 28015
+        }
+      ]
+    }
+  ]
+}
 ```
 
 Capabilities
