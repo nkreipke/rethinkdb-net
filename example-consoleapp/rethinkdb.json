@@ -1,0 +1,24 @@
+{
+  "clusters": [
+    {
+      "name": "example",
+      "defaultLogger": {
+        "enabled": "true",
+        "category": "warning"
+      },
+      "connectionPool": {
+        "enabled": true,
+        "queryTimeout": 300
+      },
+      "networkErrorHandling": {
+        "enabled": true
+      },
+      "endpoints": [
+        {
+          "address": "127.0.0.1",
+          "port": 28015
+        }
+      ]
+    }
+  ]
+}

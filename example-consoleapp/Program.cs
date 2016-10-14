@@ -4,16 +4,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using RethinkDb;
 using RethinkDb.Configuration;
+using RethinkDb.ConnectionFactories;
+using Microsoft.Extensions.Configuration;
 
 namespace RethinkDb.Examples.ConsoleApp
 {
     public static class Program
     {
-        private static IConnectionFactory connectionFactory = ConfigurationAssembler.CreateConnectionFactory("example");
         private static CancellationTokenSource stopMonitor = new CancellationTokenSource();
+        private static IConnectionFactory connectionFactory;
 
         public static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build();
+            connectionFactory = new ConnectionFactoryBuilder().FromConfiguration(config).Build("example");
+
             Thread changefeedThread;
             using (var conn = connectionFactory.Get())
             {
