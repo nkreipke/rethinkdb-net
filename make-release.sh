@@ -1,9 +1,17 @@
 #!/bin/bash
 
-shopt -s globstar
+#shopt -s globstar
 set -e
 
 NEW_VERSION=$1
+OUTPUT_DIR=nuget-dist
+
+update_version_in_project() {
+    local project_json="$1/project.json"
+    sed -E -i '' -e "s#\"version\": \"[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?\"#\"version\": \"$NEW_VERSION\"#" "$project_json"
+    grep -q "\"version\": \"$NEW_VERSION\"" "$project_json"
+    return $?
+}
 
 if ! [[ $NEW_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]] ; then
     echo "Argument must match [0-9]+.[0-9]+.[0-9]+.[0-9]+"
@@ -15,6 +23,7 @@ echo "Processing release $NEW_VERSION"
 # ensure all files have the same line endings
 find . -type f -name '*.cs' -exec dos2unix -m '{}' \;
 
+# update AssemblyInfos
 for f in `find . -name 'AssemblyInfo.cs'`; do
     sed -E -i '' -e "s/\"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"/\"$NEW_VERSION\"/" $f
     if ! grep -q "$NEW_VERSION" "$f"
@@ -24,28 +33,19 @@ for f in `find . -name 'AssemblyInfo.cs'`; do
     fi
 done
 
-sed -E -i '' -e "s#<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+</version>#<version>$NEW_VERSION</version>#" rethinkdb-net.nuspec
-if ! grep -q "<version>$NEW_VERSION</version>" rethinkdb-net.nuspec
-then
+# update project.jsons
+(
+    update_version_in_project rethinkdb-net &&
+    update_version_in_project rethinkdb-net-newtonsoft &&
+    update_version_in_project rethinkdb-net-appconfig
+) || (
     echo "sed failed"
     exit
-fi
+)
 
+echo abcxyz
 
-sed -E -i '' -e "s#<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+</version>#<version>$NEW_VERSION</version>#" rethinkdb-net-newtonsoft.nuspec
-if ! grep -q "<version>$NEW_VERSION</version>" rethinkdb-net-newtonsoft.nuspec
-then
-    echo "sed failed"
-    exit
-fi
-
-sed -E -i '' -e "s#<dependency id=\"rethinkdb-net\" version=\"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\" />#<dependency id=\"rethinkdb-net\" version=\"$NEW_VERSION\" />#" rethinkdb-net-newtonsoft.nuspec
-if ! grep -q "<dependency id=\"rethinkdb-net\" version=\"$NEW_VERSION\" />" rethinkdb-net-newtonsoft.nuspec
-then
-    echo "sed failed"
-    exit
-fi
-
+# update release notes
 sed -E -i '' -e "s/## Next Release/## $NEW_VERSION (`date +%Y-%m-%d`)/" RELEASE-NOTES.md
 if ! grep -q "## $NEW_VERSION (`date +%Y-%m-%d`)" RELEASE-NOTES.md
 then
@@ -61,7 +61,7 @@ echo
 echo "Things to check for manual-intervention:"
 echo
 echo "  * Release notes are up-to-date."
-echo "  * <releaseNotes> in rethinkdb-net.nuspec don't need changes."
+echo "  * releaseNotes in */project.json don't need changes."
 echo
 read -p "Build, commit, upload? [yN] " -n 1 -r
 echo    # (optional) move to a new line
@@ -73,9 +73,11 @@ then
     exit
 fi
 
-xbuild /p:Configuration=Release rethinkdb-net.sln
-nuget pack rethinkdb-net.nuspec
-nuget pack rethinkdb-net-newtonsoft.nuspec
+dotnet restore
+dotnet pack --output "$OUTPUT_DIR" --configuration Release rethinkdb-net
+dotnet pack --output "$OUTPUT_DIR" --configuration Release rethinkdb-net-newtonsoft
+dotnet pack --output "$OUTPUT_DIR" --configuration Release rethinkdb-net-appconfig
+
 git commit -a -m"Update version to $NEW_VERSION"
 git push
 git tag -a -m"Version ${NEW_VERSION}" v${NEW_VERSION}
