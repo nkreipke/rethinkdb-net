@@ -1,5 +1,15 @@
 # rethinkdb-net Release Notes
 
+## Next Release
+
+### Features
+
+* rethinkdb-net has been ported to **.NET Standard 1.3** (.NET 4.5 compatibility remains).
+
+### Breaking Changes
+
+* Instructions for migrating to this version can be found [here](https://github.com/mfenniak/rethinkdb-net/wiki/Migrating-from-0.12.1-and-earlier).
+
 ## 0.12.1.0 (2016-01-21)
 
 ### Bugfixes
