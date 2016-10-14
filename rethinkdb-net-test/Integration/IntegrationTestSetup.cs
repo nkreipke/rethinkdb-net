@@ -51,7 +51,7 @@ namespace RethinkDb.Test.Integration
 
         private IPEndPoint GetRethinkEndpoint()
         {
-            var configuration = new RethinkDbClientSection();
+            var configuration = new RethinkDbConfiguration();
 
             new ConfigurationBuilder().AddJsonFile("rethinkdb.json").Build().Bind(configuration);
             Validator.ValidateObject(configuration, new ValidationContext(configuration));
