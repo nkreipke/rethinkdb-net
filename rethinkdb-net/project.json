@@ -3,6 +3,17 @@
   "authors": ["Mathieu Fenniak", "Karl Grzeszczak", "Dale Ragan", "John Weber"],
   "description": "RethinkDB Client Driver for .NET",
 
+  "packOptions": {
+    "owners": ["Mathieu Fenniak"],
+    "releaseNotes": "See https://github.com/mfenniak/rethinkdb-net/blob/master/RELEASE-NOTES.md for detailed release notes.",
+    "projectUrl": "https://github.com/mfenniak/rethinkdb-net",
+    "licenseUrl": "https://raw.github.com/mfenniak/rethinkdb-net/master/LICENSE.txt",
+    "requiresLicenseAcceptance": false,
+    "files": {
+      "includeFiles": ["../LICENSE.txt", "../README.md", "../RELEASE-NOTES.md"]
+    }
+  },
+
   "dependencies": {
     "protobuf-net": "2.1.0",
     "Microsoft.Extensions.Configuration": "1.0.0",

@@ -3,6 +3,17 @@
   "authors": [ "Brian Chavez" ],
   "description": "Alternative object serializer for rethinkdb-net using Newtonsoft.Json",
 
+  "packOptions": {
+    "owners": ["Mathieu Fenniak"],
+    "releaseNotes": "See https://github.com/mfenniak/rethinkdb-net/blob/master/RELEASE-NOTES.md for detailed release notes.",
+    "projectUrl": "https://github.com/mfenniak/rethinkdb-net",
+    "licenseUrl": "https://raw.github.com/mfenniak/rethinkdb-net/master/LICENSE.txt",
+    "requiresLicenseAcceptance": false,
+    "files": {
+      "includeFiles": ["../LICENSE.txt", "../README.md", "../RELEASE-NOTES.md"]
+    }
+  },
+
   "dependencies": {
     "Newtonsoft.Json": "9.0.1",
     "rethinkdb-net": { "target": "project" }
