@@ -9,9 +9,9 @@ namespace RethinkDb.ConnectionFactories
 {
     public class ConnectionFactoryBuilder
     {
-        public RethinkDbClientSection Configuration { get; set; }
+        public RethinkDbConfiguration Configuration { get; set; }
 
-        public Func<IEnumerable<EndPoint>, string, ILogger, IConnectionFactory> BaseFactory { get; set; } = (endpoints, authorizationKey, logger) =>
+        public Func<IEnumerable<System.Net.EndPoint>, string, ILogger, IConnectionFactory> BaseFactory { get; set; } = (endpoints, authorizationKey, logger) =>
         {
             return new DefaultConnectionFactory(endpoints, authorizationKey, logger);
         };
@@ -36,13 +36,15 @@ namespace RethinkDb.ConnectionFactories
         }
 
         /// <summary>
-        /// Creates a connection factory from a <see cref="RethinkDb.Configuration.ClusterElement" /> object.
+        /// Creates a connection factory from a <see cref="RethinkDb.Configuration.Cluster" /> object.
         /// </summary>
         /// <param name="cluster">The cluster configuration.</param>
-        public IConnectionFactory Build(ClusterElement cluster)
+        public IConnectionFactory Build(Cluster cluster)
         {
-            List<EndPoint> endpoints = new List<EndPoint>();
-            foreach (EndPointElement ep in cluster.EndPoints)
+            cluster.Validate();
+
+            var endpoints = new List<System.Net.EndPoint>();
+            foreach (var ep in cluster.EndPoints)
             {
                 IPAddress ip;
                 if (IPAddress.TryParse(ep.Address, out ip))
@@ -54,7 +56,7 @@ namespace RethinkDb.ConnectionFactories
             var authorizationKey = !string.IsNullOrEmpty(cluster.AuthorizationKey) ? 
                                    cluster.AuthorizationKey : null;
             var logger = cluster.DefaultLogger != null && cluster.DefaultLogger.Enabled ?
-                         new DefaultLogger(cluster.DefaultLogger.Category, Console.Out) : null;  
+                         new Logging.DefaultLogger(cluster.DefaultLogger.Category, Console.Out) : null;  
 
             var connectionFactory = BaseFactory(endpoints, authorizationKey, logger);
 

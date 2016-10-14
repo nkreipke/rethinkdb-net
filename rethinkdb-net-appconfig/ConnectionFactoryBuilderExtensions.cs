@@ -1,5 +1,6 @@
 using System;
 using System.Configuration;
+using RethinkDb.Configuration;
 using RethinkDb.ConnectionFactories;
 
 using AutoMapper;
@@ -23,21 +24,21 @@ namespace RethinkDb.AppConfig
             
             return new ConnectionFactoryBuilder
             {
-                Configuration = MapperConfig.Value.CreateMapper().Map<Configuration.RethinkDbClientSection>(configuration)
+                Configuration = MapperConfig.Value.CreateMapper().Map<RethinkDbConfiguration>(configuration)
             };
         }
 
         private static MapperConfiguration LoadMapperConfiguration()
         {
             return new MapperConfiguration(cfg => {
-                cfg.CreateMap<ClusterElement, Configuration.ClusterElement>();
+                cfg.CreateMap<ClusterElement, Cluster>();
                 cfg.CreateMap<ClusterElementCollection, List<ClusterElement>>().ConvertUsing(x => x.Cast<ClusterElement>().ToList());
-                cfg.CreateMap<ConnectionPoolElement, Configuration.ConnectionPoolElement>();
-                cfg.CreateMap<DefaultLoggerElement, Configuration.DefaultLoggerElement>();
-                cfg.CreateMap<EndPointElement, Configuration.EndPointElement>();
+                cfg.CreateMap<ConnectionPoolElement, ConnectionPool>();
+                cfg.CreateMap<DefaultLoggerElement, DefaultLogger>();
+                cfg.CreateMap<EndPointElement, EndPoint>();
                 cfg.CreateMap<EndPointElementCollection, List<EndPointElement>>().ConvertUsing(x => x.Cast<EndPointElement>().ToList());
-                cfg.CreateMap<NetworkErrorHandlingElement, Configuration.NetworkErrorHandlingElement>();
-                cfg.CreateMap<RethinkDbClientSection, Configuration.RethinkDbClientSection>();
+                cfg.CreateMap<NetworkErrorHandlingElement, NetworkErrorHandling>();
+                cfg.CreateMap<RethinkDbClientSection, RethinkDbConfiguration>();
             });
         }
     }
