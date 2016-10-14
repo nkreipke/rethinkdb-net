@@ -1,3 +1,6 @@
+nuget-dist/
+test-results/
+rethinkdb_data/
 
 # Created by https://www.gitignore.io/api/visualstudio,visualstudiocode
 
